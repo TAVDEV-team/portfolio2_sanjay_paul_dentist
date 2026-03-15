@@ -25,12 +25,17 @@ export default function Navbar() {
           </div>
 
           {/* Hamburger for mobile */}
+          
           <button
             className="md:hidden p-2 text-slate-600"
-            onClick={() => setIsOpen(true)}
-            aria-label="Menu"
+            onClick={() => setIsOpen(!isOpen)} // toggle open/close
+            aria-label={isOpen ? "Close menu" : "Open menu"}
           >
-            <HiMenu className="h-6 w-6" />
+            {isOpen ? (
+              <HiX className="h-6 w-6" />  // Cross icon when open
+            ) : (
+              <HiMenu className="h-6 w-6" /> // Hamburger icon when closed
+            )}
           </button>
 
           {/* Desktop menu */}
@@ -53,54 +58,52 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-
       {/* Mobile Sidebar */}
+      {isOpen && (
+        <div className="fixed inset-0 z-40">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setIsOpen(false)}
+          ></div>
+
+          {/* Sidebar panel */}
       <div
-        className={`fixed inset-0 z-40 transition ${
-          isOpen ? "visible" : "invisible"
+        className={`fixed top-0 right-0 h-full w-64 bg-sky-900 shadow-lg transform transition-transform duration-300 z-50 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Overlay */}
-        <div
-          className="absolute inset-0 bg-black/40"
+      {/* Close button */}
+      <button
+        onClick={() => setIsOpen(false)}
+        className="absolute top-4 right-4 text-white hover:text-sky-300"
+        aria-label="Close menu"
+      >
+        <HiX className="h-6 w-6 " />
+      </button>
+
+      {/* Menu links */}
+      <div className="flex flex-col mt-16 p-6 gap-6 text-white font-medium">
+        <Link href="/services" onClick={() => setIsOpen(false)}>
+          Services
+        </Link>
+        <Link href="/About" onClick={() => setIsOpen(false)}>
+          About
+        </Link>
+        <Link href="/Contact" onClick={() => setIsOpen(false)}>
+          Contact
+        </Link>
+        <Link
+          href="#appointment"
+          className="bg-sky-600 text-white px-5 py-2 rounded-full text-center"
           onClick={() => setIsOpen(false)}
-        ></div>
-
-        {/* Sidebar panel */}
-        <div
-          className={`absolute top-0 left-0 h-full w-64 bg-sky-900 shadow-lg transform transition-transform duration-300 ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
         >
-          {/* Header with close button */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <span className="font-bold text-white">Menu</span>
-            <button onClick={() => setIsOpen(false)}>
-              <HiX className="h-6 w-6 text-white" />
-            </button>
-          </div>
-
-          {/* Menu links */}
-          <div className="flex flex-col p-6 gap-6 text-white font-medium">
-            <Link href="/services" onClick={() => setIsOpen(false)}>
-              Services
-            </Link>
-            <Link href="/About" onClick={() => setIsOpen(false)}>
-              About
-            </Link>
-            <Link href="/Contact" onClick={() => setIsOpen(false)}>
-              Contact
-            </Link>
-            <Link
-              href="#appointment"
-              className="bg-sky-600 text-white px-5 py-2 rounded-full text-center"
-              onClick={() => setIsOpen(false)}
-            >
-              Book Now
-            </Link>
-          </div>
-        </div>
+          Book Now
+        </Link>
       </div>
+    </div>
+  </div>
+)}
     </>
   );
 }
